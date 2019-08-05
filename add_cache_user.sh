@@ -131,10 +131,10 @@ add_user()
 
       if ! cache_user_exists;
          then
-            echo "User added Successfully"
+            echo "User Added Successfully"
             echo ""
          else
-            echo "User was not added Successfully, please check manually"
+            echo "User was not Added Successfully, please check manually"
             echo ""
             return 1
       fi
@@ -162,9 +162,6 @@ main()
       echo "Running Add Cache User Script for Host = `hostname`"
       echo ""
 
-      #os_user_exists
-      #is_cache
-      #cache_user_exists
       add_user
 
    echo "------"
