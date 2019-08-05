@@ -16,6 +16,8 @@
 #
 ### CHANGE LOG ###
 #
+# 20190805 = Added username input validation in Main
+# 20190805 = Changed add_user default namespace to blank/default instead of %SYS
 #
 #########################################################################
 
@@ -69,6 +71,7 @@ is_up()
 
 }
 
+
 cache_user_exists()
 {
 
@@ -88,7 +91,7 @@ cache_user_exists()
       for i in ${instances[@]};
       do
          output=`sudo su - root -c "echo -e 'w ##class(Security.Users).Exists(\"$USER_ID\")\nh' |csession $i -U %SYS |awk NR==5"`
-         if [ $output -eq  1 ]
+         if [ $output -eq 1 ]
          then
             echo "User Exists in Cache"
             echo ""
@@ -99,6 +102,8 @@ cache_user_exists()
       done
 
    else
+      echo "Cache is Not Installed, exiting..."
+      echo ""
       return 1
    fi
 
@@ -118,7 +123,7 @@ add_user()
 
       for i in ${instances[@]};
       do
-         sudo su - root -c "echo -e 's x=##Class(Security.Users).Create(\"$USER_ID\",\"%All\",\"CHANGEPASSWORDHERE\",\"$USER_ID\",\"%SYS\")\nh' |csession $i -U %SYS > /dev/null 2>&1"
+         sudo su - root -c "echo -e 's x=##Class(Security.Users).Create(\"$USER_ID\",\"%All\",\"CHANGEPASSWORDHERE\",\"$USER_ID\")\nh' |csession $i -U %SYS > /dev/null 2>&1"
       done
 
       echo "Checking if Add was Successful..."
@@ -146,19 +151,26 @@ main()
 
    ### Main Function for Overall Script ###
 
-   echo ""
-   echo "Running Add Cache User Script for Host = `hostname`"
-   echo ""
-   echo "UserID Provided = $USER_ID"
-   echo ""
+   if [ -z "$USER_ID" ]
+   then
+      echo ""
+      echo "No User Role Input - Please run again with a Username Specified"
+      echo ""
 
-   #os_user_exists
-   #is_cache
-   #cache_user_exists
-   add_user
+   else
+      echo ""
+      echo "Running Add Cache User Script for Host = `hostname`"
+      echo ""
+
+      #os_user_exists
+      #is_cache
+      #cache_user_exists
+      add_user
 
    echo "------"
    echo ""
+
+   fi
 
 }
 
