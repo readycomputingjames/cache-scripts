@@ -94,7 +94,7 @@ cache_user_exists()
 del_user()
 {
 
-   if cache_user_exists;
+   if ! cache_user_exists;
    then
 
       # Load Instances into an Array, in case we have Multiple
@@ -122,7 +122,7 @@ del_user()
       fi
 
    else
-      echo "Requirements are not met to add new User, nothing to do..."
+      echo "User does not exist in Cache, nothing to do..."
       echo ""
    fi
 
